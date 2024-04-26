@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Raleway } from "next/font/google";
 import "./globals.css";
 
 import { SessionProvider } from "@/providers/session-provider";
+import HeaderNavBar from "@/components/header-nav-bar";
 
-const inter = Inter({ subsets: ["latin"] });
+const raleway = Raleway({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "google-map-restaurant-finder",
@@ -18,8 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+      <body className={raleway.className}>
+        <SessionProvider>
+          <HeaderNavBar />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

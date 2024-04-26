@@ -7,7 +7,7 @@
 
 | 概要 | 使用ライブラリ | 目的           | リンク                            |
 | ---- | -------------- | -------------- | --------------------------------- |
-| 認証 | NextAuth ver4  | 認証機能の付与 | [link](https://next-auth.js.org/) |
+| 認証 | NextAuth ver4  | 認証情報の管理 | [link](https://next-auth.js.org/) |
 | 認証 | NextAuth       | ---            | [link]()                          |
 | 認証 | NextAuth       | ---            | [link]()                          |
 | 認証 | NextAuth       | ---            | [link]()                          |
