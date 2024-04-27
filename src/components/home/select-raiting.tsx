@@ -1,10 +1,14 @@
-import { useState } from "react";
-
 import { raitingLists } from "@/constants/category-items";
 
-const SelectRaiting = () => {
-  const [selectedRaitingIds, setSelectedRaitingIds] = useState<number[]>([]);
+interface SelectRaitingProps {
+  selectedRaitingIds: number[];
+  setSelectedRaitingIds: (ids: number[]) => void;
+}
 
+const SelectRaiting = ({
+  selectedRaitingIds,
+  setSelectedRaitingIds,
+}: SelectRaitingProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Raiting</h2>
@@ -16,10 +20,12 @@ const SelectRaiting = () => {
               type="checkbox"
               value={item.id}
               onChange={(e) =>
-                setSelectedRaitingIds((prev) =>
-                  prev.includes(Number(e.target.value))
-                    ? prev.filter((id) => id !== Number(e.target.value))
-                    : [...prev, Number(e.target.value)]
+                setSelectedRaitingIds(
+                  selectedRaitingIds.includes(Number(e.target.value))
+                    ? selectedRaitingIds.filter(
+                        (id) => id !== Number(e.target.value)
+                      )
+                    : [...selectedRaitingIds, Number(e.target.value)]
                 )
               }
             />

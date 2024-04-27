@@ -1,23 +1,75 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import CategoryList from "@/components/home/category-list";
+import GoogleMapView from "@/components/home/google-map-view";
 import RangeSelect from "@/components/home/range-select";
 import SelectRaiting from "@/components/home/select-raiting";
-import GoogleMapView from "@/components/home/google-map-view";
+import { categoryLists } from "@/constants/category-items";
+import axiosInstance from "@/libs/axios";
+import { useMap } from "@/store/use-map";
+import { useShopList } from "@/store/use-shoplist";
+import ShopList from "@/components/home/shop-list";
 
 export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { userLocation, setUserLocation } = useMap();
+  const { shopList, setShopList } = useShopList();
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
+  const [radius, setRadius] = useState(2500);
+  const [selectedRaitingIds, setSelectedRaitingIds] = useState<number[]>([]);
 
   useEffect(() => {
     if (!session) {
       router.push("/login");
     }
+
+    getUserLocation();
   }, [session, router]);
+
+  useEffect(() => {
+    getGooglePlace();
+  }, [selectedCategoryId, radius]);
+
+  const getUserLocation = useCallback(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
+  }, []);
+
+  const getGooglePlace = useCallback(async () => {
+    try {
+      const params = {
+        category: `${
+          categoryLists.find((item) => item.id === selectedCategoryId)?.name
+        } restaurant`,
+        lat: userLocation?.lat,
+        lng: userLocation?.lng,
+        radius,
+      };
+
+      const res = await axiosInstance.get("/google-place", {
+        params,
+      });
+
+      if (res.status !== 200) {
+        throw new Error("データの取得に失敗しました");
+      }
+
+      setShopList(res.data.results);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedCategoryId, radius]);
 
   if (!session) {
     return null;
@@ -26,12 +78,21 @@ export default function Home() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 h-screen">
       <div className="p-4 space-y-8">
-        <CategoryList />
-        <RangeSelect />
-        <SelectRaiting />
+        <CategoryList
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
+        />
+        <RangeSelect radius={radius} setRadius={setRadius} />
+        <SelectRaiting
+          selectedRaitingIds={selectedRaitingIds}
+          setSelectedRaitingIds={setSelectedRaitingIds}
+        />
       </div>
       <div className="col-span-3">
         <GoogleMapView />
+        <div className="relative md:absolute w-full md:w-3/4 bottom-52 md:bottom-8 px-4">
+          <ShopList />
+        </div>
       </div>
     </div>
   );

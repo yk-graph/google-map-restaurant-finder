@@ -20,6 +20,6 @@ export async function GET(request: NextRequest) {
     );
 
     const data = await res.json();
-    return NextResponse.json({ data });
+    return NextResponse.json(data);
   } catch (error) {}
 }

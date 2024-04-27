@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useLayoutEffect, useState } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-import axiosInstance from "@/libs/axios";
+import { useMap } from "@/store/use-map";
 
 const containerStyle = {
   width: "100%",
-  height: "70vh",
+  height: "90vh",
 };
 
 const GoogleMapView = () => {
@@ -14,46 +13,9 @@ const GoogleMapView = () => {
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
   });
+  const { userLocation } = useMap();
 
-  const [userLocation, setUserLocation] = useState<
-    google.maps.LatLng | google.maps.LatLngLiteral
-  >();
-
-  const getUserLocation = useCallback(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
-  }, []);
-
-  const getGooglePlace = useCallback(async () => {
-    try {
-      const res = await axiosInstance.get("/google-place", {
-        params: {
-          category: "restaurant",
-          lat: userLocation?.lat,
-          lng: userLocation?.lng,
-          radius: 5000,
-        },
-      });
-
-      if (res.data.status !== "OK") {
-        throw new Error("データの取得に失敗しました");
-      }
-
-      return res.data.results;
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useLayoutEffect(() => {
-    getUserLocation();
-  }, []);
-
-  return isLoaded ? (
+  return isLoaded && userLocation ? (
     <div>
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -75,7 +37,9 @@ const GoogleMapView = () => {
         )}
       </GoogleMap>
     </div>
-  ) : null;
+  ) : (
+    <p>Loading...</p>
+  );
 };
 
 export default GoogleMapView;

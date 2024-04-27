@@ -1,11 +1,16 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 import { categoryLists } from "@/constants/category-items";
 
-const CategoryList = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
+interface CategoryListProps {
+  selectedCategoryId: number | undefined;
+  setSelectedCategoryId: (id: number) => void;
+}
 
+const CategoryList = ({
+  selectedCategoryId,
+  setSelectedCategoryId,
+}: CategoryListProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Food Type</h2>
@@ -13,7 +18,7 @@ const CategoryList = () => {
         {categoryLists.map((item) => (
           <div
             key={item.id}
-            className={`flex flex-col justify-center items-center bg-gray-100 p-2 m-2 rounded-lg grayscale hover:grayscale-0 cursor-pointer transition duration-200 ease-in-out
+            className={`flex flex-col justify-center items-center bg-gray-100 p-2 m-2 rounded-lg grayscale hover:grayscale-0 cursor-pointer transition-all
               ${
                 selectedCategoryId === item.id &&
                 "grayscale-0 border border-purple-400"

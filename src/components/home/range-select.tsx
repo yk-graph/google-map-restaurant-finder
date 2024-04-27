@@ -1,8 +1,9 @@
-import { useState } from "react";
+interface RangeSelectProps {
+  radius: number;
+  setRadius: (radius: number) => void;
+}
 
-const RangeSelect = () => {
-  const [radius, setRadius] = useState(50);
-
+const RangeSelect = ({ radius, setRadius }: RangeSelectProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Radius (In Meter)</h2>
@@ -10,12 +11,12 @@ const RangeSelect = () => {
         type="range"
         className="w-full bg-gray-200 rounded-lg appearance-none cursor-pointer"
         min={0}
-        max={100}
-        step={10}
+        max={5000}
+        step={500}
         onChange={(e) => setRadius(parseInt(e.target.value))}
         defaultValue={radius}
       />
-      <label className="text-gray-500">{radius * 100} in Meter</label>
+      <label className="text-gray-500">{radius} in Meter</label>
     </div>
   );
 };
