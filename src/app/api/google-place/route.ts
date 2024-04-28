@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const radius = request.nextUrl.searchParams.get("radius");
 
     const res = await fetch(
-      `${BASE_URL}/textsearch/json?query=${category}&location=${lat},${lng}&radius=${radius}&key=${GOOGLE_API_KEY}`,
+      `${BASE_URL}/nearbysearch/json?keyword=${category}&type=restaurant&location=${lat},${lng}&radius=${radius}&language=ja&key=${GOOGLE_API_KEY}`,
       {
         headers: {
           "Content-Type": "application/json",

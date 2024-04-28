@@ -22,7 +22,7 @@ export default function Home() {
   const { setShopList, setLoading } = useShopList();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
-  const [radius, setRadius] = useState(2500);
+  const [radius, setRadius] = useState(500);
   const [selectedRaitingIds, setSelectedRaitingIds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -50,16 +50,18 @@ export default function Home() {
       categoryId?: number;
       radiusNumber?: number;
     }) => {
+      if (!categoryId && !selectedCategoryId) return;
+
       try {
         setLoading(true);
 
         const params = {
-          category: `${
-            categoryLists.find((item) => item.id === categoryId)?.name
-          } restaurant`,
+          category: categoryLists.find(
+            (item) => item.id === (categoryId || selectedCategoryId)
+          )?.name,
           lat: userLocation?.lat,
           lng: userLocation?.lng,
-          radius: radiusNumber,
+          radius: radiusNumber || radius,
         };
 
         const res = await axiosInstance.get("/google-place", {

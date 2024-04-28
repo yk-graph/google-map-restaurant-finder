@@ -2,6 +2,8 @@
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 import { useMap } from "@/store/use-map";
+import { useShopList } from "@/store/use-shoplist";
+import Markers from "./markers";
 
 const containerStyle = {
   width: "100%",
@@ -14,6 +16,7 @@ const GoogleMapView = () => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
   });
   const { userLocation } = useMap();
+  const { shopList } = useShopList();
 
   return isLoaded && userLocation ? (
     <div>
@@ -35,6 +38,8 @@ const GoogleMapView = () => {
             }}
           />
         )}
+        {shopList &&
+          shopList.map((shop) => <Markers key={shop.place_id} shop={shop} />)}
       </GoogleMap>
     </div>
   ) : (
