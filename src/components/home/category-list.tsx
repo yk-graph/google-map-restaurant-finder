@@ -5,11 +5,19 @@ import { categoryLists } from "@/constants/category-items";
 interface CategoryListProps {
   selectedCategoryId: number | undefined;
   setSelectedCategoryId: (id: number) => void;
+  handleSearchShopCategory: ({
+    categoryId,
+    radiusNumber,
+  }: {
+    categoryId?: number;
+    radiusNumber?: number;
+  }) => Promise<void>;
 }
 
 const CategoryList = ({
   selectedCategoryId,
   setSelectedCategoryId,
+  handleSearchShopCategory,
 }: CategoryListProps) => {
   return (
     <div>
@@ -23,7 +31,10 @@ const CategoryList = ({
                 selectedCategoryId === item.id &&
                 "grayscale-0 border border-purple-400"
               }`}
-            onClick={() => setSelectedCategoryId(item.id)}
+            onClick={() => {
+              setSelectedCategoryId(item.id);
+              handleSearchShopCategory({ categoryId: item.id });
+            }}
           >
             <Image src={item.icon} alt={item.name} height={40} width={40} />
             {item.name}

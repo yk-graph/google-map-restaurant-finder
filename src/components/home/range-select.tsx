@@ -1,9 +1,20 @@
 interface RangeSelectProps {
   radius: number;
   setRadius: (radius: number) => void;
+  handleSearchShopRadius: ({
+    categoryId,
+    radiusNumber,
+  }: {
+    categoryId?: number;
+    radiusNumber?: number;
+  }) => Promise<void>;
 }
 
-const RangeSelect = ({ radius, setRadius }: RangeSelectProps) => {
+const RangeSelect = ({
+  radius,
+  setRadius,
+  handleSearchShopRadius,
+}: RangeSelectProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Radius (In Meter)</h2>
@@ -13,7 +24,10 @@ const RangeSelect = ({ radius, setRadius }: RangeSelectProps) => {
         min={0}
         max={5000}
         step={500}
-        onChange={(e) => setRadius(parseInt(e.target.value))}
+        onChange={(e) => {
+          setRadius(parseInt(e.target.value));
+          handleSearchShopRadius({ radiusNumber: parseInt(e.target.value) });
+        }}
         defaultValue={radius}
       />
       <label className="text-gray-500">{radius} in Meter</label>

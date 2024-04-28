@@ -3,11 +3,19 @@ import { raitingLists } from "@/constants/category-items";
 interface SelectRaitingProps {
   selectedRaitingIds: number[];
   setSelectedRaitingIds: (ids: number[]) => void;
+  handleSearchShopRaiting: ({
+    categoryId,
+    radiusNumber,
+  }: {
+    categoryId?: number;
+    radiusNumber?: number;
+  }) => Promise<void>;
 }
 
 const SelectRaiting = ({
   selectedRaitingIds,
   setSelectedRaitingIds,
+  handleSearchShopRaiting,
 }: SelectRaitingProps) => {
   return (
     <div>
@@ -19,15 +27,16 @@ const SelectRaiting = ({
             <input
               type="checkbox"
               value={item.id}
-              onChange={(e) =>
+              onChange={(e) => {
                 setSelectedRaitingIds(
                   selectedRaitingIds.includes(Number(e.target.value))
                     ? selectedRaitingIds.filter(
                         (id) => id !== Number(e.target.value)
                       )
                     : [...selectedRaitingIds, Number(e.target.value)]
-                )
-              }
+                );
+                handleSearchShopRaiting({});
+              }}
             />
           </div>
         ))}

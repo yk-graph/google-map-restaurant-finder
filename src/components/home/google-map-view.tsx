@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 import { useMap } from "@/store/use-map";
 
@@ -23,7 +23,7 @@ const GoogleMapView = () => {
         zoom={16}
       >
         {userLocation && (
-          <Marker
+          <MarkerF
             position={userLocation}
             icon={{
               url: "/user-location.png",
