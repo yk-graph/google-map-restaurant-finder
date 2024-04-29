@@ -1,3 +1,5 @@
+import { useShopList } from "@/store/use-shoplist";
+import { exchangePlaceText } from "@/utils/exchange-place-text";
 import Image from "next/image";
 
 type ShopItem = google.maps.places.PlaceResult & {
@@ -10,25 +12,33 @@ type ShopItem = google.maps.places.PlaceResult & {
 };
 
 interface ShopItemProps {
-  shopList: ShopItem;
+  shopItem: ShopItem;
 }
 
-const ShopItem = ({ shopList }: ShopItemProps) => {
-  const photoRef = shopList.photos ? shopList?.photos[0].photo_reference : "";
+const ShopItem = ({ shopItem }: ShopItemProps) => {
+  const { setSelectedShopId } = useShopList();
+
+  const photoRef = shopItem.photos ? shopItem?.photos[0].photo_reference : "";
   const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoRef}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
 
   return (
-    <div className="w-40 flex-shrink-0 p-2 rounded-lg bg-white">
+    <div
+      className="w-40 flex-shrink-0 p-2 rounded-lg bg-white cursor-pointer"
+      onClick={() => setSelectedShopId(shopItem.place_id)}
+    >
       <Image
         src={imageUrl}
-        alt={shopList.name || ""}
-        height={90}
-        width={160}
+        alt={shopItem.name || ""}
+        height={81}
+        width={144}
         className="rounded-lg object-cover aspect-video"
       />
-      <h2 className="font-bold mt-1 line-clamp-1">{shopList.name || ""}</h2>
-      <p className="text-sm text-gray-400 line-clamp-2">
-        {shopList.formatted_address}
+      <h2 className="text-sm font-bold mt-1 line-clamp-1">
+        {shopItem.name || ""}
+      </h2>
+      <p className="text-xs text-gray-400 line-clamp-2">
+        {exchangePlaceText(shopItem.plus_code?.compound_code || "")}
+        {shopItem.vicinity || ""}
       </p>
       <div className="flex gap-1 items-center">
         <svg
@@ -43,7 +53,7 @@ const ShopItem = ({ shopList }: ShopItemProps) => {
             clipRule="evenodd"
           />
         </svg>
-        <p className="text-sm font-bold">{shopList.rating}</p>
+        <p className="text-sm font-bold">{shopItem.rating}</p>
       </div>
     </div>
   );

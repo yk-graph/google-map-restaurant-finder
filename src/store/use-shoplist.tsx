@@ -7,6 +7,8 @@ interface ShopListState {
   setShopList: (results: ShopItem[] | null) => void;
   isLoaging: boolean;
   setLoading: (loading: boolean) => void;
+  selectedShopId: string | undefined;
+  setSelectedShopId: (shop: string | undefined) => void;
 }
 
 export const useShopList = create<ShopListState>((set) => ({
@@ -14,4 +16,6 @@ export const useShopList = create<ShopListState>((set) => ({
   setShopList: (results) => set({ shopList: results }),
   isLoaging: false,
   setLoading: (loading) => set({ isLoaging: loading }),
+  selectedShopId: undefined,
+  setSelectedShopId: (shopId) => set({ selectedShopId: shopId }),
 }));

@@ -46,7 +46,7 @@ const ShopList = () => {
       >
         {!isLoaging
           ? shopList.map((shop) => (
-              <ShopItem key={shop.place_id} shopList={shop} />
+              <ShopItem key={shop.place_id} shopItem={shop} />
             ))
           : [...Array(10)].map((_, index) => <SkeltonLoading key={index} />)}
       </div>

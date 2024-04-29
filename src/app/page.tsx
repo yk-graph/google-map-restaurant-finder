@@ -22,7 +22,7 @@ export default function Home() {
   const { setShopList, setLoading } = useShopList();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
-  const [radius, setRadius] = useState(500);
+  const [radius, setRadius] = useState(2500);
   const [selectedRaitingIds, setSelectedRaitingIds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -61,9 +61,10 @@ export default function Home() {
           )?.name,
           lat: userLocation?.lat,
           lng: userLocation?.lng,
-          radius: radiusNumber || radius,
+          radius: radiusNumber === 0 ? 0 : radiusNumber || radius,
         };
 
+        console.log("params", params);
         const res = await axiosInstance.get("/google-place", {
           params,
         });
@@ -88,7 +89,7 @@ export default function Home() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 h-screen">
-      <div className="p-4 space-y-8">
+      <div className="p-4 space-y-8 bg-white">
         <CategoryList
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
@@ -105,9 +106,9 @@ export default function Home() {
           handleSearchShopRaiting={getGooglePlace}
         />
       </div>
-      <div className="col-span-3">
+      <div className="col-span-3 bg-slate-100">
         <GoogleMapView />
-        <div className="relative md:absolute w-full md:w-3/4 bottom-52 md:bottom-8 px-4">
+        <div className="w-full p-4">
           <ShopList />
         </div>
       </div>

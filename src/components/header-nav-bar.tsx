@@ -7,7 +7,7 @@ const HeaderNavBar = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center justify-between p-2 shadow-md">
+    <div className="relative flex items-center justify-between p-2 shadow-md z-10">
       <div className="flex gap-7 items-center">
         <Image src="/logo.png" alt="logo" width={50} height={50} />
         <h2 className="cursor-pointer hover:text-blue-500">Home</h2>
