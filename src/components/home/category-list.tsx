@@ -1,24 +1,13 @@
 import Image from "next/image";
 
 import { categoryLists } from "@/constants/category-items";
+import { useLocation } from "@/store/use-location";
+import { useShopList } from "@/store/use-shoplist";
 
-interface CategoryListProps {
-  selectedCategoryId: number | undefined;
-  setSelectedCategoryId: (id: number) => void;
-  handleSearchShopCategory: ({
-    categoryId,
-    radiusNumber,
-  }: {
-    categoryId?: number;
-    radiusNumber?: number;
-  }) => Promise<void>;
-}
+const CategoryList = () => {
+  const { location } = useLocation();
+  const { selectedCategoryId, setSelectedCategoryId } = useShopList();
 
-const CategoryList = ({
-  selectedCategoryId,
-  setSelectedCategoryId,
-  handleSearchShopCategory,
-}: CategoryListProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Food Type</h2>
@@ -30,11 +19,10 @@ const CategoryList = ({
               ${
                 selectedCategoryId === item.id &&
                 "grayscale-0 border border-purple-400"
-              }`}
-            onClick={() => {
-              setSelectedCategoryId(item.id);
-              handleSearchShopCategory({ categoryId: item.id });
-            }}
+              }
+              ${!location && "pointer-events-none"}
+              `}
+            onClick={() => setSelectedCategoryId(item.id)}
           >
             <Image src={item.icon} alt={item.name} height={40} width={40} />
             {item.name}

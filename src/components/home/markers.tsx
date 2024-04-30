@@ -1,14 +1,17 @@
+import { MarkerF, OverlayView } from "@react-google-maps/api";
+
+import ShopItem from "@/components/home/shop-item";
+import { useLocation } from "@/store/use-location";
 import { useShopList } from "@/store/use-shoplist";
 import { ShopItem as ShopItemType } from "@/types";
-import { MarkerF, OverlayView } from "@react-google-maps/api";
-import ShopItem from "./shop-item";
 
 interface MarkersProps {
   shop: ShopItemType;
 }
 
 const Markers = ({ shop }: MarkersProps) => {
-  const { selectedShopId, setSelectedShopId } = useShopList();
+  const { selectedShop, setSelectedShop } = useShopList();
+  const { setLocation } = useLocation();
 
   if (!shop.geometry || !shop.geometry.location) {
     return null;
@@ -20,14 +23,20 @@ const Markers = ({ shop }: MarkersProps) => {
       icon={{
         url: "/circle.png",
         scaledSize: {
-          width: 10,
-          height: 10,
+          width: 15,
+          height: 15,
           equals: () => false,
         },
       }}
-      onClick={() => setSelectedShopId(shop.place_id)}
+      onClick={() => {
+        setSelectedShop(shop);
+        setLocation({
+          lat: shop.geometry!.location!.lat as unknown as number,
+          lng: shop.geometry!.location!.lng as unknown as number,
+        });
+      }}
     >
-      {selectedShopId === shop.place_id ? (
+      {selectedShop && selectedShop.place_id === shop.place_id ? (
         <OverlayView
           position={shop.geometry.location}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}

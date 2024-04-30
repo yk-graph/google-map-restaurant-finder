@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import ShopItem from "@/components/home/shop-item";
 import { useShopList } from "@/store/use-shoplist";
-import SkeltonLoading from "../skelton-loading";
+import SkeltonLoading from "@/components/skelton-loading";
 
 const ShopList = () => {
   const { shopList, isLoaging } = useShopList();
@@ -20,7 +20,7 @@ const ShopList = () => {
     element.scrollLeft += 500; // Tips: 指定したElementに対して500pxスクロールさせる処理
   };
 
-  if (!shopList) return null;
+  if (!shopList || shopList.length === 0) return null;
 
   return (
     <>

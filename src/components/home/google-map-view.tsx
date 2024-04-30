@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
-import { useMap } from "@/store/use-map";
+import Markers from "@/components/home/markers";
+import { useLocation } from "@/store/use-location";
 import { useShopList } from "@/store/use-shoplist";
-import Markers from "./markers";
+import { useEffect } from "react";
 
 const containerStyle = {
   width: "100%",
-  height: "90vh",
+  height: "70vh",
 };
 
 const GoogleMapView = () => {
@@ -15,14 +16,24 @@ const GoogleMapView = () => {
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
   });
-  const { userLocation } = useMap();
-  const { shopList } = useShopList();
 
-  return isLoaded && userLocation ? (
+  const { location, userLocation, map, setMap } = useLocation();
+  const { shopList, selectedShop } = useShopList();
+
+  useEffect(() => {
+    if (map && selectedShop) {
+      map.panTo(selectedShop.geometry!.location!);
+    }
+
+    console.log("pan!!!!!!!!!", selectedShop);
+  }, [selectedShop]);
+
+  return isLoaded && location ? (
     <div>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={userLocation}
+        center={location}
+        onLoad={(map) => setMap(map)}
         zoom={16}
       >
         {userLocation && (

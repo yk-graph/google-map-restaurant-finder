@@ -1,22 +1,9 @@
 import { raitingLists } from "@/constants/category-items";
+import { useShopList } from "@/store/use-shoplist";
 
-interface SelectRaitingProps {
-  selectedRaitingIds: number[];
-  setSelectedRaitingIds: (ids: number[]) => void;
-  handleSearchShopRaiting: ({
-    categoryId,
-    radiusNumber,
-  }: {
-    categoryId?: number;
-    radiusNumber?: number;
-  }) => Promise<void>;
-}
+const SelectRaiting = () => {
+  const { selectedRaitingIds, setSelectedRaitingIds } = useShopList();
 
-const SelectRaiting = ({
-  selectedRaitingIds,
-  setSelectedRaitingIds,
-  handleSearchShopRaiting,
-}: SelectRaitingProps) => {
   return (
     <div>
       <h2 className="font-bold">Select Raiting</h2>
@@ -35,7 +22,6 @@ const SelectRaiting = ({
                       )
                     : [...selectedRaitingIds, Number(e.target.value)]
                 );
-                handleSearchShopRaiting({});
               }}
             />
           </div>

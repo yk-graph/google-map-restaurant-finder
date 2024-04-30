@@ -1,6 +1,8 @@
+import Image from "next/image";
+
+import { useLocation } from "@/store/use-location";
 import { useShopList } from "@/store/use-shoplist";
 import { exchangePlaceText } from "@/utils/exchange-place-text";
-import Image from "next/image";
 
 type ShopItem = google.maps.places.PlaceResult & {
   photos: {
@@ -16,15 +18,22 @@ interface ShopItemProps {
 }
 
 const ShopItem = ({ shopItem }: ShopItemProps) => {
-  const { setSelectedShopId } = useShopList();
+  const { setSelectedShop } = useShopList();
+  const { setLocation } = useLocation();
 
   const photoRef = shopItem.photos ? shopItem?.photos[0].photo_reference : "";
   const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoRef}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
 
   return (
     <div
-      className="w-40 flex-shrink-0 p-2 rounded-lg bg-white cursor-pointer"
-      onClick={() => setSelectedShopId(shopItem.place_id)}
+      className="w-40 flex-shrink-0 p-2 rounded-lg bg-white cursor-pointer hover:scale-105 transition-all"
+      onClick={() => {
+        setSelectedShop(shopItem);
+        setLocation({
+          lat: shopItem.geometry!.location!.lat as unknown as number,
+          lng: shopItem.geometry!.location!.lng as unknown as number,
+        });
+      }}
     >
       <Image
         src={imageUrl}
